@@ -1,0 +1,154 @@
+﻿namespace InPursuitOfHappiness
+{
+    using ConsoleApp19;
+    using System;
+
+    public class CarParking
+    {
+        public int numCars;
+        public int numSlots;
+
+        public int num_Cars;
+        public static int count = 0;
+
+
+        public static int TotalCount()
+        {
+            return count + CarParkingArray.ObjectsCounter();
+        }
+        public CarParking(int numSlots, int numCars) //конструктор база
+        {
+            count++;
+            this.NumSlots = numSlots;
+            this.NumCars = numCars;
+
+
+        }
+
+        public CarParking(CarParking cp)// конструктор копирующий че-то такое
+        {
+            count++;
+            this.numSlots = cp.numSlots;
+            this.numCars = cp.numCars;
+
+        }
+
+
+
+
+        public CarParking() // вроде как конструктор без параметров
+        {
+            this.numSlots = 0;
+            this.numCars = 0;
+            count++;
+        }
+        public double CalculateOccupancy() // метод
+        {
+            double occupancy = (double) NumCars / NumSlots *100;
+            
+            return occupancy;
+            
+        }
+        public double CalculateDifference()
+        {
+            double difference = (double)NumSlots - NumCars;
+            return difference;
+        }
+        public static double CalculateOccupancyStatic(int numSlots,int numCars)// статическая функция 
+        {
+            double occupancy = (double) numCars / numSlots * 100;
+            return occupancy;
+        }
+
+        public int NumCars // Свойства
+        {
+            get
+            {
+                return this.numCars;
+            }
+            set
+            {
+                this.numCars = value;
+            }
+        }
+        public int NumSlots // Свойства
+        {
+            get
+            {
+                return this.numSlots;
+            }
+            set
+            {
+                this.numSlots = value;
+            }
+        }
+        
+
+
+        // унарные операции
+        
+        public static CarParking operator ++(CarParking cp)                           //перегруженная операция уменьшение на 1
+        {
+
+            cp.numCars++;
+            return cp;
+        }
+        public static CarParking operator --(CarParking cp)                           //перегруженная операция добавление 1
+        {
+            cp.numCars--;
+            return cp;
+        }
+        // операции приведенного типа
+
+        public static explicit operator int(CarParking cp)// Перегрузка оператора приведения типа int (количество автомобилей, которых не хватает до загруженности парковки на 80%)
+        {
+            return (int)(cp.numSlots * 0.8)- cp.numCars;
+        }
+
+
+        public static implicit operator bool(CarParking cp) // Перегрузка оператора приведения типа bool (наличие свободных мест на парковке)
+        {
+            return cp.numCars < cp.numSlots;
+        }
+
+        // бинарные операции
+
+        //объединение двух парковок в одну
+        public static CarParking operator +(CarParking cp1, CarParking cp2)
+        {
+            CarParking result = new CarParking();
+            result.numSlots = cp1.numSlots + cp2.numSlots;
+            result.numCars = cp1.numCars + cp2.numCars;
+            return result;
+        }
+        // Перегрузка оператора > (сравнение загруженности парковок)
+        public static bool operator >(CarParking cp1, CarParking cp2)
+        {
+            return cp1.numCars < cp2.numCars && cp1.numSlots > cp2.numSlots;
+        }
+
+        // Перегрузка оператора < (сравнение загруженности парковок)
+        public static bool operator <(CarParking cp1, CarParking cp2)
+        {
+            return cp1.numCars > cp2.numCars && cp1.numSlots < cp2.numSlots;
+        }
+        public void Print()//это для вывода промежуточного результата или итогового в демонстрации
+        {
+            Console.WriteLine($"Слоты: {numSlots}, Машины: {numCars}");
+        }
+
+        // Переопределение метода Equals для сравнения двух объектов
+        public override bool Equals(object obj)
+        {
+            if (obj == null) 
+            { 
+                return false;
+            }
+            if (obj is CarParking cp )
+            {
+                return this.numSlots == cp.numSlots && this.numCars == cp.numCars;
+            }
+            else return false;
+        }
+    }
+}
